@@ -54,37 +54,45 @@ partial class GoogleDrive
 		private set { isAuthorized = value; }
 	}
 
-	string accessToken = null;
+	string accessToken = String.Empty;
 
 	/// <summary>
 	/// Access token.
 	/// </summary>
 	string AccessToken
 	{
-		get
-		{
-			if (accessToken == null)
-			{
-				int key = ClientID.GetHashCode();
-				accessToken = PlayerPrefs.GetString("UnityGoogleDrive_Token_" + key, "");
-			}
+        get
+        {
+            return accessToken;
+        }
+        set
+        {
+            accessToken = value;
+        }
+        //get
+        //{
+        //    if (accessToken == null)
+        //    {
+        //        int key = ClientID.GetHashCode();
+        //        accessToken = PlayerPrefs.GetString("UnityGoogleDrive_Token_" + key, "");
+        //    }
 
-			return accessToken;
-		}
-		set
-		{
-			if (accessToken != value)
-			{
-				accessToken = value;
+        //    return accessToken;
+        //}
+        //set
+        //{
+        //    if (accessToken != value)
+        //    {
+        //        accessToken = value;
 
-				int key = ClientID.GetHashCode();
+        //        int key = ClientID.GetHashCode();
 
-				if (accessToken != null)
-					PlayerPrefs.SetString("UnityGoogleDrive_Token_" + key, accessToken);
-				else
-					PlayerPrefs.DeleteKey("UnityGoogleDrive_Token_" + key);
-			}
-		}
+        //        if (accessToken != null)
+        //            PlayerPrefs.SetString("UnityGoogleDrive_Token_" + key, accessToken);
+        //        else
+        //            PlayerPrefs.DeleteKey("UnityGoogleDrive_Token_" + key);
+        //    }
+        //}
 	}
 
 	string refreshToken = null;
@@ -182,6 +190,8 @@ partial class GoogleDrive
 	/// </example>
 	public IEnumerator Authorize()
 	{
+        Debug.Log("Authorize AccessToken : " + AccessToken);
+
 		#region CHECK CLIENT ID AND SECRET
 		if (Application.platform == RuntimePlatform.Android)
 		{
@@ -233,6 +243,8 @@ partial class GoogleDrive
 #else
 		if (AccessToken == "")
 		{
+            Debug.Log("Authorize token is empty");
+
 			// Open browser and authorization.
 			var routine = GetAuthorizationCodeAndAccessToken();
 			while (routine.MoveNext())
@@ -806,6 +818,8 @@ partial class GoogleDrive
 	/// <returns>TokenInfoResponse or Exception for error</returns>
 	static IEnumerator ValidateToken(string accessToken)
 	{
+        Debug.Log("ValidateToken AccessToke : " + accessToken);
+
 		var request = new UnityWebRequest(
 			"https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + accessToken);
 

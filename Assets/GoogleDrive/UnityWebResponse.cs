@@ -81,11 +81,13 @@ namespace Midworld
             while (!www.isDone)
                 yield return null;
 
-            //while (www.isDone)
-            //{
-            //}
 
             Debug.Log("UnityWebResponse : IsDone ");
+            if (!String.IsNullOrEmpty(www.error))
+            {
+                Debug.Log("UnityWebResponse error : " + www.error);
+            }
+
             Debug.Log("UnityWebResponse : Text : " + www.text);
             this.bytes = www.bytes;
             Hashtable responseHeaders = new Hashtable();

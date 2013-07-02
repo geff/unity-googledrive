@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using JsonFx.Json;
 using Midworld;
+using UnityEngine;
 
 partial class GoogleDrive
 {
@@ -196,17 +197,19 @@ partial class GoogleDrive
 		}
 		#endregion
 
+        Debug.Log("GetFile " + id);
+
 		var request = new UnityWebRequest(
 			new Uri("https://www.googleapis.com/drive/v2/files/" + id));
 		request.headers["Authorization"] = "Bearer " + AccessToken;
 
-        UnityWebResponse webResponse = new UnityWebResponse();
-        var response = webResponse.GetResponse(request);
+        UnityWebResponse response = new UnityWebResponse();
+        var iter = response.GetResponse(request);
 
-		while (response.MoveNext())
+        while (iter.MoveNext())
 			yield return null;
 
-        JsonReader reader = new JsonReader(webResponse.text);
+        JsonReader reader = new JsonReader(response.text);
 		var json = reader.Deserialize<Dictionary<string, object>>();
 
 		if (json == null)
@@ -876,7 +879,9 @@ partial class GoogleDrive
 			}
 
 			// Save the resumable session URI.
-			uploadUrl = response.headers["Location"] as string;
+            Debug.Log("Get upload URL : headers : " + response.DumpHeaders());
+
+			uploadUrl = response.headers["LOCATION"] as string;
 		}
 		else
 		{
@@ -885,6 +890,8 @@ partial class GoogleDrive
 
 		// Upload the file.
 		{
+            Debug.Log("UploadURl : " + uploadUrl);
+
 			var request = new UnityWebRequest(uploadUrl);
 			request.method = "PUT";
 			request.headers["Authorization"] = "Bearer " + AccessToken;
