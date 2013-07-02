@@ -200,11 +200,13 @@ partial class GoogleDrive
 			new Uri("https://www.googleapis.com/drive/v2/files/" + id));
 		request.headers["Authorization"] = "Bearer " + AccessToken;
 
-		var response = new UnityWebResponse(request);
-		while (!response.isDone)
+        UnityWebResponse webResponse = new UnityWebResponse();
+        var response = webResponse.GetResponse(request);
+
+		while (response.MoveNext())
 			yield return null;
 
-		JsonReader reader = new JsonReader(response.text);
+        JsonReader reader = new JsonReader(webResponse.text);
 		var json = reader.Deserialize<Dictionary<string, object>>();
 
 		if (json == null)
@@ -295,9 +297,15 @@ partial class GoogleDrive
 			new Uri("https://www.googleapis.com/drive/v2/files?q=" + query));
 		request.headers["Authorization"] = "Bearer " + AccessToken;
 
-		var response = new UnityWebResponse(request);
-		while (!response.isDone)
-			yield return null;
+        //var response = new UnityWebResponse(request);
+        //while (!response.isDone)
+        //    yield return null;
+
+        UnityWebResponse response = new UnityWebResponse();
+        var iter = response.GetResponse(request);
+
+        while (iter.MoveNext())
+            yield return null;
 
 		JsonReader reader = new JsonReader(response.text);
 		var json = reader.Deserialize<Dictionary<string, object>>();
@@ -391,9 +399,15 @@ partial class GoogleDrive
 		}
 		request.body = Encoding.UTF8.GetBytes(JsonWriter.Serialize(data));
 
-		var response = new UnityWebResponse(request);
-		while (!response.isDone)
-			yield return null;
+        //var response = new UnityWebResponse(request);
+        //while (!response.isDone)
+        //    yield return null;
+
+        UnityWebResponse response = new UnityWebResponse();
+        var iter = response.GetResponse(request);
+
+        while (iter.MoveNext())
+            yield return null;
 
 		JsonReader reader = new JsonReader(response.text);
 		var json = reader.Deserialize<Dictionary<string, object>>();
@@ -449,9 +463,15 @@ partial class GoogleDrive
 		request.method = "DELETE";
 		request.headers["Authorization"] = "Bearer " + AccessToken;
 
-		var response = new UnityWebResponse(request);
-		while (!response.isDone)
-			yield return null;
+        //var response = new UnityWebResponse(request);
+        //while (!response.isDone)
+        //    yield return null;
+
+        UnityWebResponse response = new UnityWebResponse();
+        var iter = response.GetResponse(request);
+
+        while (iter.MoveNext())
+            yield return null;
 
 		// If successful, empty response.
 		JsonReader reader = new JsonReader(response.text);
@@ -508,9 +528,15 @@ partial class GoogleDrive
 		string metadata = JsonWriter.Serialize(file.ToJSON());
 		request.body = Encoding.UTF8.GetBytes(metadata);
 
-		var response = new UnityWebResponse(request);
-		while (!response.isDone)
-			yield return null;
+        //var response = new UnityWebResponse(request);
+        //while (!response.isDone)
+        //    yield return null;
+
+        UnityWebResponse response = new UnityWebResponse();
+        var iter = response.GetResponse(request);
+
+        while (iter.MoveNext())
+            yield return null;
 
 		JsonReader reader = new JsonReader(response.text);
 		var json = reader.Deserialize<Dictionary<string, object>>();
@@ -559,9 +585,15 @@ partial class GoogleDrive
 		request.headers["Authorization"] = "Bearer " + AccessToken;
 		request.body = new byte[0]; // with no data
 
-		var response = new UnityWebResponse(request);
-		while (!response.isDone)
-			yield return null;
+        //var response = new UnityWebResponse(request);
+        //while (!response.isDone)
+        //    yield return null;
+
+        UnityWebResponse response = new UnityWebResponse();
+        var iter = response.GetResponse(request);
+
+        while (iter.MoveNext())
+            yield return null;
 
 		JsonReader reader = new JsonReader(response.text);
 		var json = reader.Deserialize<Dictionary<string, object>>();
@@ -676,9 +708,15 @@ partial class GoogleDrive
 		string metadata = JsonWriter.Serialize(newFile.ToJSON());
 		request.body = Encoding.UTF8.GetBytes(metadata);
 
-		var response = new UnityWebResponse(request);
-		while (!response.isDone)
-			yield return null;
+        //var response = new UnityWebResponse(request);
+        //while (!response.isDone)
+        //    yield return null;
+
+        UnityWebResponse response = new UnityWebResponse();
+        var iter = response.GetResponse(request);
+
+        while (iter.MoveNext())
+            yield return null;
 
 		JsonReader reader = new JsonReader(response.text);
 		var json = reader.Deserialize<Dictionary<string, object>>();
@@ -810,9 +848,15 @@ partial class GoogleDrive
 			string metadata = JsonWriter.Serialize(file.ToJSON());
 			request.body = Encoding.UTF8.GetBytes(metadata);
 
-			var response = new UnityWebResponse(request);
-			while (!response.isDone)
-				yield return null;
+            //var response = new UnityWebResponse(request);
+            //while (!response.isDone)
+            //    yield return null;
+
+            UnityWebResponse response = new UnityWebResponse();
+            var iter = response.GetResponse(request);
+
+            while (iter.MoveNext())
+                yield return null;
 
 			if (response.statusCode != 200)
 			{
@@ -847,9 +891,15 @@ partial class GoogleDrive
 			request.headers["Content-Type"] = "application/octet-stream"; // file.MimeType;
 			request.body = data;
 
-			var response = new UnityWebResponse(request);
-			while (!response.isDone)
-				yield return null;
+            //var response = new UnityWebResponse(request);
+            //while (!response.isDone)
+            //    yield return null;
+
+            UnityWebResponse response = new UnityWebResponse();
+            var iter = response.GetResponse(request);
+
+            while (iter.MoveNext())
+                yield return null;
 
 			JsonReader reader = new JsonReader(response.text);
 			var json = reader.Deserialize<Dictionary<string, object>>();
@@ -934,9 +984,15 @@ partial class GoogleDrive
 		var request = new UnityWebRequest(url);
 		request.headers["Authorization"] = "Bearer " + AccessToken;
 
-		var response = new UnityWebResponse(request);
-		while (!response.isDone)
-			yield return null;
+        //var response = new UnityWebResponse(request);
+        //while (!response.isDone)
+        //    yield return null;
+
+        UnityWebResponse response = new UnityWebResponse();
+        var iter = response.GetResponse(request);
+
+        while (iter.MoveNext())
+            yield return null;
 
 		yield return new AsyncSuccess(response.bytes);
 	}

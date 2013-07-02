@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Text;
+using UnityEngine;
 
 namespace Midworld
 {
@@ -55,25 +56,74 @@ namespace Midworld
 			this.headers["Accept-Encoding"] = "gzip, deflate";
 		}
 
-		public UnityWebResponse GetResponse()
-		{
-			return GetResponse(null);
-		}
+        //public UnityWebResponse GetResponse()
+        //{
+        //    return GetResponse(null);
+        //}
 
-		public UnityWebResponse GetResponse(Action<UnityWebResponse> callback)
-		{
-			UnityWebResponse response = new UnityWebResponse(this);
+        public int statusCode { get; protected set; }
+
+        public string reasonPhrase { get; protected set; }
+
+        public byte[] bytes { get; protected set; }
+
+        private string cachedText = null;
+
+        public bool isDone { get; set; }
+        public String text
+        {
+            get
+            {
+                if (cachedText == null)
+                    cachedText = Encoding.UTF8.GetString(bytes);
+
+                return cachedText;
+            }
+        }
+
+        public IEnumerator GetResponse()
+        {
+            UnityEngine.Debug.Log("UnityWebResponse : uri " + this.uri.AbsoluteUri);
+
+            WWW www = new WWW(this.uri.AbsoluteUri, this.body, this.headers);
+
+            while (!www.isDone)
+                yield return null;
+
+            //while (www.isDone)
+            //{
+            //}
+
+            Debug.Log("UnityWebResponse : IsDone ");
+            Debug.Log("UnityWebResponse : Text : " + www.text);
+            this.bytes = www.bytes;
+            Hashtable responseHeaders = new Hashtable();
+
+            foreach (string key in www.responseHeaders.Keys)
+            {
+                responseHeaders.Add(key, www.responseHeaders[key]);
+            }
+
+            this.headers = responseHeaders;
+            this.statusCode = 200;
+            this.isDone = true;
+            this.cachedText = www.text;
+        }
+
+        //public UnityWebResponse GetResponse(Action<UnityWebResponse> callback)
+        //{
+        //    UnityWebResponse response = new UnityWebResponse(this);
 			
-			if (callback != null)
-			{
-				response.done = (coroutine) =>
-				{
-					callback(coroutine as UnityWebResponse);
-				};
-			}
+        //    if (callback != null)
+        //    {
+        //        response.done = (coroutine) =>
+        //        {
+        //            callback(coroutine as UnityWebResponse);
+        //        };
+        //    }
 
-			return response;
-		}
+        //    return response;
+        //}
 
 		public string DumpHeaders()
 		{

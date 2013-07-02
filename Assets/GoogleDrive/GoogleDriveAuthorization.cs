@@ -687,17 +687,18 @@ partial class GoogleDrive
 			"grant_type=authorization_code",
 			authorizationCode, ClientID, ClientSecret, RedirectURI));
 
-		var response = request.GetResponse();
-		while (!response.isDone)
-			yield return null;
+        var validate = request.GetResponse();
 
-		if (response.error != null)
-		{
-			yield return response.error;
-			yield break;
-		}
+        while (validate.MoveNext())
+            yield return null;
 
-		JsonReader reader = new JsonReader(response.text);
+        //if (response.error != null)
+        //{
+        //    yield return response.error;
+        //    yield break;
+        //}
+
+        JsonReader reader = new JsonReader(request.text);
 		var json = reader.Deserialize<Dictionary<string, object>>();
 
 		if (json == null)
@@ -727,17 +728,25 @@ partial class GoogleDrive
 			"grant_type=refresh_token",
 			ClientID, ClientSecret, refreshToken));
 
-		var response = request.GetResponse();
-		while (!response.isDone)
-			yield return null;
+        //var response = request.GetResponse();
+        //while (!response.isDone)
+        //    yield return null;
 
-		if (response.error != null)
+
+        UnityWebResponse response = new UnityWebResponse();
+        var iter = response.GetResponse(request);
+
+        while (iter.MoveNext())
+            yield return null;
+
+
+        if (response.error != null)
 		{
-			yield return response.error;
+            yield return response.error;
 			yield break;
 		}
 
-		JsonReader reader = new JsonReader(response.text);
+        JsonReader reader = new JsonReader(response.text);
 		var json = reader.Deserialize<Dictionary<string, object>>();
 
 		if (json == null)
@@ -800,9 +809,15 @@ partial class GoogleDrive
 		var request = new UnityWebRequest(
 			"https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=" + accessToken);
 
-		var response = request.GetResponse();
-		while (!response.isDone)
-			yield return null;
+        //var response = request.GetResponse();
+        //while (!response.isDone)
+        //    yield return null;
+
+        UnityWebResponse response = new UnityWebResponse();
+        var iter = response.GetResponse(request);
+
+        while (iter.MoveNext())
+            yield return null;
 
 		if (response.error != null)
 		{
@@ -848,9 +863,15 @@ partial class GoogleDrive
 		var request = new UnityWebRequest(
 			"https://accounts.google.com/o/oauth2/revoke?token=" + token);
 
-		var response = request.GetResponse();
-		while (!response.isDone)
-			yield return null;
+        //var response = request.GetResponse();
+        //while (!response.isDone)
+        //    yield return null;
+
+        UnityWebResponse response = new UnityWebResponse();
+        var iter = response.GetResponse(request);
+
+        while (iter.MoveNext())
+            yield return null;
 
 		if (response.error != null)
 		{

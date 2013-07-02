@@ -1,13 +1,15 @@
 ﻿using System;
 using System.IO;
-using System.Net;
-using System.Net.Sockets;
 using System.Collections;
 using System.Text;
 using System.Threading;
 using UnityEngine;
 
 #if UNITY_EDITOR || !(UNITY_ANDROID || UNITY_IPHONE || UNITY_FLASH)
+
+using System.Net;
+using System.Net.Sockets;
+
 /// <summary>
 /// Listen server for Google authorization result(Internal)
 /// </summary>
